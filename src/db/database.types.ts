@@ -66,18 +66,21 @@ export interface Database {
         Row: {
           buy_price: number
           cheese_name: string
+          offer_starts_at: string
           sell_price: number
           updated_at: string
         }
         Insert: {
           buy_price: number
           cheese_name: string
+          offer_starts_at?: string
           sell_price: number
           updated_at?: string
         }
         Update: {
           buy_price?: number
           cheese_name?: string
+          offer_starts_at?: string
           sell_price?: number
           updated_at?: string
         }
@@ -103,4 +106,3 @@ export interface Database {
     CompositeTypes: Record<string, never>
   }
 }
-
