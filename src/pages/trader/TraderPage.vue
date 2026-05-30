@@ -24,7 +24,7 @@ const { sessionState, setPlayerSession } = usePlayerSessionStore()
 const { showToast } = useToastStore()
 
 const search = ref('')
-const onlyOwned = ref(false)
+const ownershipFilter = ref<'all' | 'owned' | 'unowned'>('all')
 const inventory = ref<InventoryEntry[]>([])
 const history = ref<TraderPriceHistoryPoint[]>([])
 const prices = ref<TraderPrice[]>([])
@@ -68,7 +68,13 @@ const visiblePrices = computed(() => {
       return false
     }
 
-    if (onlyOwned.value && quantityFor(price.cheeseName) === 0) {
+    const ownedQuantity = quantityFor(price.cheeseName)
+
+    if (ownershipFilter.value === 'owned' && ownedQuantity === 0) {
+      return false
+    }
+
+    if (ownershipFilter.value === 'unowned' && ownedQuantity > 0) {
       return false
     }
 
@@ -237,10 +243,41 @@ onUnmounted(() => {
         <Search class="size-4 text-base-content/50" />
         <input v-model="search" type="text" class="grow" placeholder="Filter cheeses" />
       </label>
-      <label class="label flex cursor-pointer justify-start gap-3">
-        <input v-model="onlyOwned" type="checkbox" class="checkbox checkbox-sm" />
-        <span class="label-text">Only cheeses I own</span>
-      </label>
+      <fieldset class="space-y-2">
+        <legend class="text-sm font-medium text-base-content/70">Show</legend>
+        <div class="flex flex-wrap gap-4">
+          <label class="label flex cursor-pointer justify-start gap-2 p-0">
+            <input
+              v-model="ownershipFilter"
+              type="radio"
+              name="ownership-filter"
+              value="all"
+              class="radio radio-sm"
+            />
+            <span class="label-text">All</span>
+          </label>
+          <label class="label flex cursor-pointer justify-start gap-2 p-0">
+            <input
+              v-model="ownershipFilter"
+              type="radio"
+              name="ownership-filter"
+              value="owned"
+              class="radio radio-sm"
+            />
+            <span class="label-text">Only cheeses I own</span>
+          </label>
+          <label class="label flex cursor-pointer justify-start gap-2 p-0">
+            <input
+              v-model="ownershipFilter"
+              type="radio"
+              name="ownership-filter"
+              value="unowned"
+              class="radio radio-sm"
+            />
+            <span class="label-text">Only cheeses I don't own</span>
+          </label>
+        </div>
+      </fieldset>
     </div>
 
     <div v-if="loadError" class="alert alert-error">
