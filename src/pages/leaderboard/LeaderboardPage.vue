@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import { formatOrdinal } from '@/dumb/ui/formatters'
 import { getLeaderboard } from '@/entities/player/playerApi'
@@ -11,6 +11,7 @@ const leaderboard = ref<LeaderboardEntry[]>([])
 const isLoading = ref(true)
 const loadError = ref('')
 
+const router = useRouter()
 const { sessionState } = usePlayerSessionStore()
 
 const playerRank = computed(() => {
@@ -53,10 +54,38 @@ onMounted(() => {
     <div class="space-y-2">
       <h1 class="text-2xl font-bold">Leaderboard</h1>
       <p v-if="playerRank" class="text-sm text-base-content/70">
-        You are {{ formatOrdinal(playerRank) }}. You probably want to
-        <RouterLink class="link link-primary" :to="{ name: 'marketplace' }">buy more cheese</RouterLink>:
-        <RouterLink class="link link-primary" :to="{ name: 'trader' }">Trader</RouterLink>
+        You are {{ formatOrdinal(playerRank) }}. I think you should buy more cheese:
       </p>
+      <div v-if="playerRank" class="flex gap-2">
+        <button class="btn btn-primary flex-1" type="button" @click="router.push({ name: 'marketplace' })">
+          Marketplace
+        </button>
+        <button class="btn btn-secondary flex-1" type="button" @click="router.push({ name: 'trader' })">
+          Trader
+        </button>
+      </div>
+    </div>
+
+    <div class="stats stats-vertical border border-base-300 shadow-sm">
+      <div class="stat">
+        <div class="stat-title">Number of cheeses</div>
+        <div class="stat-value text-3xl">{{ sessionState.player?.cheeseCount ?? 0 }}</div>
+        <div class="stat-desc">x1 in score</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-title">Unique cheese types</div>
+        <div class="stat-value text-3xl">{{ sessionState.player?.uniqueTypes ?? 0 }}</div>
+        <div class="stat-desc">x5 in score</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-title">Final score</div>
+        <div class="stat-value text-3xl">{{ sessionState.player?.score ?? 0 }}</div>
+        <div class="stat-desc">
+          {{ sessionState.player?.cheeseCount ?? 0 }} + ({{ sessionState.player?.uniqueTypes ?? 0 }} × 5)
+        </div>
+      </div>
     </div>
 
     <div v-if="loadError" class="alert alert-error">
@@ -94,4 +123,3 @@ onMounted(() => {
     </div>
   </section>
 </template>
-

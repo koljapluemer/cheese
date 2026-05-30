@@ -6,7 +6,6 @@ import InventoryPage from '@/pages/inventory/InventoryPage.vue'
 import LeaderboardPage from '@/pages/leaderboard/LeaderboardPage.vue'
 import NameScreenPage from '@/pages/name-screen/NameScreenPage.vue'
 import PlaceholderPage from '@/pages/placeholder/PlaceholderPage.vue'
-import StatsPage from '@/pages/stats/StatsPage.vue'
 import TraderPage from '@/pages/trader/TraderPage.vue'
 
 declare module 'vue-router' {
@@ -90,15 +89,6 @@ const router = createRouter({
       props: {
         label: 'Wheel',
       },
-      meta: {
-        showBottomNav: true,
-        showTopBar: true,
-      },
-    },
-    {
-      path: '/score',
-      name: 'score',
-      component: StatsPage,
       meta: {
         showBottomNav: true,
         showTopBar: true,
