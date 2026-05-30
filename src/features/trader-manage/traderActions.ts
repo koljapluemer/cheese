@@ -9,6 +9,8 @@ import type { PlayerSummary } from '@/entities/player/playerTypes'
 import {
   deleteTraderPrices,
   getTraderPrices,
+  recordTraderPriceHistory,
+  recordTraderTradeEvent,
   upsertTraderPrices,
   type TraderPrice,
 } from '@/entities/trader/traderApi'
@@ -81,6 +83,7 @@ function needsRefresh(prices: TraderPrice[]) {
 async function replaceTraderOffers(currentPrices: TraderPrice[], nextPrices: TraderPrice[]) {
   await deleteTraderPrices(currentPrices.map((price) => price.cheeseName))
   await upsertTraderPrices(nextPrices)
+  await recordTraderPriceHistory(nextPrices)
 }
 
 function adjustPriceAfterBuy(price: TraderPrice) {
@@ -124,6 +127,7 @@ export async function ensureTraderPricesFresh() {
   if (currentPrices.length === 0) {
     const initialPrices = buildTraderOffers()
     await upsertTraderPrices(initialPrices)
+    await recordTraderPriceHistory(initialPrices)
     return initialPrices
   }
 
@@ -153,6 +157,13 @@ export async function buyTraderCheese(
   await saveInventoryItem(playerId, currentPrice.cheeseName, (inventoryItem?.quantity ?? 0) + 1)
   await updatePlayerEconomy(playerId, player.cows - currentPrice.buyPrice, player.starterPicksCompleted)
   await upsertTraderPrices([updatedPrice])
+  await recordTraderPriceHistory([updatedPrice])
+  await recordTraderTradeEvent({
+    cheeseName: currentPrice.cheeseName,
+    price: currentPrice.buyPrice,
+    tradeKind: 'buy',
+    tradedAt: new Date().toISOString(),
+  })
 
   return {
     player: await getPlayerSummary(playerId),
@@ -178,6 +189,13 @@ export async function sellTraderCheese(
   await saveInventoryItem(playerId, currentPrice.cheeseName, inventoryItem.quantity - 1)
   await updatePlayerEconomy(playerId, player.cows + currentPrice.sellPrice, player.starterPicksCompleted)
   await upsertTraderPrices([updatedPrice])
+  await recordTraderPriceHistory([updatedPrice])
+  await recordTraderTradeEvent({
+    cheeseName: currentPrice.cheeseName,
+    price: currentPrice.sellPrice,
+    tradeKind: 'sell',
+    tradedAt: new Date().toISOString(),
+  })
 
   return {
     player: await getPlayerSummary(playerId),

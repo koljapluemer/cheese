@@ -86,6 +86,54 @@ export interface Database {
         }
         Relationships: []
       }
+      trader_price_history: {
+        Row: {
+          buy_price: number
+          captured_at: string
+          cheese_name: string
+          id: string
+          sell_price: number
+        }
+        Insert: {
+          buy_price: number
+          captured_at?: string
+          cheese_name: string
+          id?: string
+          sell_price: number
+        }
+        Update: {
+          buy_price?: number
+          captured_at?: string
+          cheese_name?: string
+          id?: string
+          sell_price?: number
+        }
+        Relationships: []
+      }
+      trader_trade_events: {
+        Row: {
+          cheese_name: string
+          id: string
+          price: number
+          trade_kind: string
+          traded_at: string
+        }
+        Insert: {
+          cheese_name: string
+          id?: string
+          price: number
+          trade_kind: string
+          traded_at?: string
+        }
+        Update: {
+          cheese_name?: string
+          id?: string
+          price?: number
+          trade_kind?: string
+          traded_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       leaderboard_rows: {

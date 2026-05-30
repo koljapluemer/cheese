@@ -3,11 +3,15 @@ import { RefreshCw, Search } from 'lucide-vue-next'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 import { useToastStore } from '@/dumb/toast/toastStore'
-import CowAmount from '@/dumb/ui/CowAmount.vue'
+import CheeseMarketCard from '@/dumb/ui/CheeseMarketCard.vue'
 import { getCheeseByName } from '@/entities/cheese/cheeseCatalog'
 import { getPlayerInventory } from '@/entities/player/playerApi'
 import type { InventoryEntry } from '@/entities/player/playerTypes'
-import type { TraderPrice } from '@/entities/trader/traderApi'
+import {
+  getTraderPriceHistory,
+  type TraderPrice,
+  type TraderPriceHistoryPoint,
+} from '@/entities/trader/traderApi'
 import { usePlayerSessionStore } from '@/features/player-session/playerSessionStore'
 import {
   buyTraderCheese,
@@ -22,6 +26,7 @@ const { showToast } = useToastStore()
 const search = ref('')
 const onlyOwned = ref(false)
 const inventory = ref<InventoryEntry[]>([])
+const history = ref<TraderPriceHistoryPoint[]>([])
 const prices = ref<TraderPrice[]>([])
 const isLoading = ref(true)
 const loadError = ref('')
@@ -37,6 +42,22 @@ function replacePrice(updatedPrice: TraderPrice) {
   prices.value = prices.value.map((price) =>
     price.cheeseName === updatedPrice.cheeseName ? updatedPrice : price,
   )
+}
+
+function appendHistoryPoint(updatedPrice: TraderPrice) {
+  history.value = [
+    ...history.value,
+    {
+      buyPrice: updatedPrice.buyPrice,
+      capturedAt: updatedPrice.updatedAt,
+      cheeseName: updatedPrice.cheeseName,
+      sellPrice: updatedPrice.sellPrice,
+    },
+  ]
+}
+
+function historyFor(cheeseName: string) {
+  return history.value.filter((point) => point.cheeseName === cheeseName)
 }
 
 const visiblePrices = computed(() => {
@@ -80,6 +101,26 @@ const formattedRemainingTime = computed(() => {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`
 })
 
+const visibleCards = computed(() =>
+  visiblePrices.value
+    .map((price) => ({
+      cheese: getCheeseByName(price.cheeseName),
+      history: historyFor(price.cheeseName),
+      ownedQuantity: quantityFor(price.cheeseName),
+      price,
+    }))
+    .filter(
+      (
+        item,
+      ): item is {
+        cheese: NonNullable<ReturnType<typeof getCheeseByName>>
+        history: TraderPriceHistoryPoint[]
+        ownedQuantity: number
+        price: TraderPrice
+      } => Boolean(item.cheese),
+    ),
+)
+
 async function loadTraderPage() {
   if (!sessionState.player) {
     return
@@ -93,9 +134,11 @@ async function loadTraderPage() {
       ensureTraderPricesFresh(),
       getPlayerInventory(sessionState.player.id),
     ])
+    const nextHistory = await getTraderPriceHistory(nextPrices.map((price) => price.cheeseName))
 
     prices.value = nextPrices
     inventory.value = nextInventory
+    history.value = nextHistory
   } catch (error) {
     loadError.value = error instanceof Error ? error.message : 'Could not load trader.'
   } finally {
@@ -122,6 +165,7 @@ async function handleBuy(price: TraderPrice) {
     const { player, tradedPrice, updatedPrice } = await buyTraderCheese(sessionState.player.id, price)
     setPlayerSession(player)
     replacePrice(updatedPrice)
+    appendHistoryPoint(updatedPrice)
     inventory.value = await getPlayerInventory(sessionState.player.id)
     showToast(`1 ${price.cheeseName} bought for ${tradedPrice}.`, 'success')
   } catch (error) {
@@ -142,6 +186,7 @@ async function handleSell(price: TraderPrice) {
     const { player, tradedPrice, updatedPrice } = await sellTraderCheese(sessionState.player.id, price)
     setPlayerSession(player)
     replacePrice(updatedPrice)
+    appendHistoryPoint(updatedPrice)
     inventory.value = await getPlayerInventory(sessionState.player.id)
     showToast(`1 ${price.cheeseName} sold for ${tradedPrice}.`, 'success')
   } catch (error) {
@@ -207,44 +252,20 @@ onUnmounted(() => {
     </div>
 
     <div v-else class="space-y-3">
-      <article
-        v-for="price in visiblePrices"
-        :key="price.cheeseName"
-        class="flex items-center gap-3 rounded-box border border-base-300 bg-base-100 p-3"
-      >
-        <img
-          v-if="getCheeseByName(price.cheeseName)"
-          :src="getCheeseByName(price.cheeseName)?.imagePath"
-          :alt="price.cheeseName"
-          class="size-14 rounded-box object-cover"
-        />
-
-        <div class="min-w-0 flex-1">
-          <div class="truncate font-medium">{{ price.cheeseName }}</div>
-          <div class="text-xs text-base-content/60">You own {{ quantityFor(price.cheeseName) }}</div>
-        </div>
-
-        <div class="flex shrink-0 gap-2">
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
-            :disabled="busyCheeseName === price.cheeseName"
-            @click="handleBuy(price)"
-          >
-            Buy
-            <CowAmount :value="price.buyPrice" />
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm"
-            :disabled="busyCheeseName === price.cheeseName || quantityFor(price.cheeseName) === 0"
-            @click="handleSell(price)"
-          >
-            Sell
-            <CowAmount :value="price.sellPrice" />
-          </button>
-        </div>
-      </article>
+      <CheeseMarketCard
+        v-for="item in visibleCards"
+        :key="item.price.cheeseName"
+        :busy="busyCheeseName === item.price.cheeseName"
+        :buy-price="item.price.buyPrice"
+        :buy-disabled="busyCheeseName === item.price.cheeseName"
+        :cheese="item.cheese"
+        :history="item.history"
+        :owned-quantity="item.ownedQuantity"
+        :sell-disabled="busyCheeseName === item.price.cheeseName || item.ownedQuantity === 0"
+        :sell-price="item.price.sellPrice"
+        @buy="handleBuy(item.price)"
+        @sell="handleSell(item.price)"
+      />
     </div>
   </section>
 </template>
