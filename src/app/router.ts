@@ -4,6 +4,7 @@ import { getStoredPlayerSession } from '@/features/player-session/playerSessionS
 import ChooseCheesePage from '@/pages/choose-cheese/ChooseCheesePage.vue'
 import FightPage from '@/pages/fight/FightPage.vue'
 import HomePage from '@/pages/home/HomePage.vue'
+import InfoPage from '@/pages/info/InfoPage.vue'
 import LeaderboardPage from '@/pages/leaderboard/LeaderboardPage.vue'
 import NameScreenPage from '@/pages/name-screen/NameScreenPage.vue'
 import PlaceholderPage from '@/pages/placeholder/PlaceholderPage.vue'
@@ -20,6 +21,15 @@ declare module 'vue-router' {
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/info',
+      name: 'info',
+      component: InfoPage,
+      meta: {
+        showBottomNav: true,
+        showTopBar: true,
+      },
+    },
     {
       path: '/',
       name: 'home',
@@ -98,8 +108,8 @@ router.beforeEach((to) => {
   const invite = typeof to.query.invite === 'string' ? to.query.invite : undefined
   const inviteQuery = invite ? { invite } : {}
 
-  if (!storedSession && to.name !== 'name') {
-    return { name: 'name', query: inviteQuery }
+  if (!storedSession && to.name !== 'info' && to.name !== 'name') {
+    return { name: 'info', query: inviteQuery }
   }
 
   if (storedSession && to.name === 'name') {
