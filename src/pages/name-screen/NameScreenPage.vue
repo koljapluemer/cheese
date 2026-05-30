@@ -44,7 +44,7 @@ async function handleSubmit() {
   try {
     const player = await registerPlayerName(nickname.value)
     setPlayerSession(player)
-    showToast(`${player.nickname} joined the race.`, 'success')
+    showToast(`${player.nickname} joined the fight.`, 'success')
     await router.replace({ name: 'choose-cheese', query: invite ? { invite } : {} })
   } catch (error) {
     showToast(getErrorMessage(error), 'error')
@@ -59,7 +59,7 @@ async function handleSubmit() {
     <div class="w-full space-y-6">
       <div class="space-y-2">
         <h1 class="text-3xl font-bold leading-tight">
-          You're about to enter the race to become the Cheese Mogul.
+          You're about to enter the fight to become the Cheese Mogul.
         </h1>
         <p class="text-base text-base-content/70">What should we call you?</p>
       </div>
