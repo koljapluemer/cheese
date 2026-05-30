@@ -9,9 +9,7 @@ const router = useRouter()
 const items = computed(() => [
   { icon: House, name: 'leaderboard', label: 'Home' },
   { icon: Package, name: 'inventory', label: 'Inventory' },
-  { icon: HandCoins, name: 'offers', label: 'Offers' },
-  { icon: Store, name: 'marketplace', label: 'Marketplace' },
-  { icon: RotateCcw, name: 'trader', label: 'Trader' },
+  { icon: HandCoins, name: 'trader', label: 'Trader' },
   { icon: Disc3, name: 'wheel', label: 'Wheel' },
 ])
 </script>

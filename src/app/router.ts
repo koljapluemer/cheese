@@ -7,6 +7,7 @@ import LeaderboardPage from '@/pages/leaderboard/LeaderboardPage.vue'
 import NameScreenPage from '@/pages/name-screen/NameScreenPage.vue'
 import PlaceholderPage from '@/pages/placeholder/PlaceholderPage.vue'
 import TraderPage from '@/pages/trader/TraderPage.vue'
+import WheelPage from '@/pages/wheel/WheelPage.vue'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -85,10 +86,7 @@ const router = createRouter({
     {
       path: '/wheel',
       name: 'wheel',
-      component: PlaceholderPage,
-      props: {
-        label: 'Wheel',
-      },
+      component: WheelPage,
       meta: {
         showBottomNav: true,
         showTopBar: true,
