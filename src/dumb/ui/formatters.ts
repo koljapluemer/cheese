@@ -21,3 +21,6 @@ export function formatCount(value: number, noun: string) {
   return `${value} ${noun}${value === 1 ? '' : 's'}`
 }
 
+export function formatPercent(value: number) {
+  return `${Math.round(value)}%`
+}

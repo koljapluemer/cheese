@@ -5,20 +5,24 @@ import type { InventoryEntry, LeaderboardEntry, PlayerSummary } from './playerTy
 function mapPlayerSummary(row: {
   cheese_count: number
   cows: number
+  fights_played: number
+  fights_won: number
   nickname: string
   player_id: string
-  score: number
   starter_picks_completed: number
   unique_types: number
+  win_rate: number
 }): PlayerSummary {
   return {
     cheeseCount: row.cheese_count,
     cows: row.cows,
+    fightsPlayed: row.fights_played,
+    fightsWon: row.fights_won,
     id: row.player_id,
     nickname: row.nickname,
-    score: row.score,
     starterPicksCompleted: row.starter_picks_completed,
     uniqueTypes: row.unique_types,
+    winRate: row.win_rate,
   }
 }
 
@@ -57,9 +61,8 @@ export async function getLeaderboard() {
   const { data, error } = await supabase
     .from('leaderboard_rows')
     .select('*')
-    .order('score', { ascending: false })
-    .order('unique_types', { ascending: false })
-    .order('cheese_count', { ascending: false })
+    .order('fights_won', { ascending: false })
+    .order('win_rate', { ascending: false })
     .order('nickname', { ascending: true })
 
   if (error) {
@@ -157,3 +160,17 @@ export async function updatePlayerEconomy(playerId: string, cows: number, starte
   }
 }
 
+export async function updatePlayerFightRecord(playerId: string, fightsPlayed: number, fightsWon: number) {
+  const supabase = getSupabaseClient()
+  const { error } = await supabase
+    .from('players')
+    .update({
+      fights_played: fightsPlayed,
+      fights_won: fightsWon,
+    })
+    .eq('id', playerId)
+
+  if (error) {
+    throw error
+  }
+}

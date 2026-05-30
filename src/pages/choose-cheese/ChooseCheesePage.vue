@@ -34,7 +34,7 @@ async function chooseCheese(cheeseName: string) {
     showToast(`1 ${cheeseName} added.`, 'success')
 
     if (player.starterPicksCompleted >= 3) {
-      await router.replace({ name: 'leaderboard' })
+      await router.replace({ name: 'home' })
       return
     }
 
@@ -75,4 +75,3 @@ async function chooseCheese(cheeseName: string) {
     </div>
   </section>
 </template>
-

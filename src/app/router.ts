@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import { getStoredPlayerSession } from '@/features/player-session/playerSessionStore'
 import ChooseCheesePage from '@/pages/choose-cheese/ChooseCheesePage.vue'
-import InventoryPage from '@/pages/inventory/InventoryPage.vue'
+import FightPage from '@/pages/fight/FightPage.vue'
+import HomePage from '@/pages/home/HomePage.vue'
 import LeaderboardPage from '@/pages/leaderboard/LeaderboardPage.vue'
 import NameScreenPage from '@/pages/name-screen/NameScreenPage.vue'
 import PlaceholderPage from '@/pages/placeholder/PlaceholderPage.vue'
@@ -21,8 +22,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'leaderboard',
-      component: LeaderboardPage,
+      name: 'home',
+      component: HomePage,
       meta: {
         showBottomNav: true,
         showTopBar: true,
@@ -42,21 +43,18 @@ const router = createRouter({
       },
     },
     {
-      path: '/inventory',
-      name: 'inventory',
-      component: InventoryPage,
+      path: '/fight',
+      name: 'fight',
+      component: FightPage,
       meta: {
         showBottomNav: true,
         showTopBar: true,
       },
     },
     {
-      path: '/offers',
-      name: 'offers',
-      component: PlaceholderPage,
-      props: {
-        label: 'Offers',
-      },
+      path: '/leaderboard',
+      name: 'leaderboard',
+      component: LeaderboardPage,
       meta: {
         showBottomNav: true,
         showTopBar: true,
@@ -105,7 +103,7 @@ router.beforeEach((to) => {
   if (storedSession && to.name === 'name') {
     return storedSession.starterPicksCompleted < 3
       ? { name: 'choose-cheese' }
-      : { name: 'leaderboard' }
+      : { name: 'home' }
   }
 
   if (storedSession && storedSession.starterPicksCompleted < 3 && to.name !== 'choose-cheese') {
@@ -113,7 +111,7 @@ router.beforeEach((to) => {
   }
 
   if (storedSession && storedSession.starterPicksCompleted >= 3 && to.name === 'choose-cheese') {
-    return { name: 'leaderboard' }
+    return { name: 'home' }
   }
 
   return true

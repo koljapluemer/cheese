@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Disc3, HandCoins, House, Package, RotateCcw, Store } from 'lucide-vue-next'
+import { Disc3, HandCoins, House, Swords, Trophy } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -7,10 +7,11 @@ const route = useRoute()
 const router = useRouter()
 
 const items = computed(() => [
-  { icon: House, name: 'leaderboard', label: 'Home' },
-  { icon: Package, name: 'inventory', label: 'Inventory' },
+  { icon: House, name: 'home', label: 'Home' },
+  { icon: Swords, name: 'fight', label: 'Fight' },
   { icon: HandCoins, name: 'trader', label: 'Trader' },
   { icon: Disc3, name: 'wheel', label: 'Wheel' },
+  { icon: Trophy, name: 'leaderboard', label: 'Leaderboard' },
 ])
 </script>
 

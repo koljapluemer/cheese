@@ -1,11 +1,13 @@
 export interface PlayerSummary {
   cheeseCount: number
   cows: number
+  fightsPlayed: number
+  fightsWon: number
   id: string
   nickname: string
-  score: number
   starterPicksCompleted: number
   uniqueTypes: number
+  winRate: number
 }
 
 export interface LeaderboardEntry extends PlayerSummary {
@@ -16,4 +18,3 @@ export interface InventoryEntry {
   cheeseName: string
   quantity: number
 }
-

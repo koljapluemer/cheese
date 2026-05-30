@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 
 import CheesePriceHistoryChart from './CheesePriceHistoryChart.vue'
 import CowAmount from './CowAmount.vue'
+import PowerBadge from './PowerBadge.vue'
 
 interface PriceHistoryPoint {
   buyPrice: number
@@ -25,6 +26,7 @@ const props = defineProps<{
     imagePath: string
     license: string
     name: string
+    power: number
     source: string
   }
   history?: PriceHistoryPoint[]
@@ -60,11 +62,16 @@ function openHistoryModal() {
 <template>
   <article class="rounded-box border border-base-300 bg-base-100 p-3 shadow-sm">
     <div class="flex items-start gap-3">
-      <img
-        :src="cheese.imagePath"
-        :alt="cheese.name"
-        class="size-20 shrink-0 rounded-box object-cover"
-      />
+      <div class="relative">
+        <img
+          :src="cheese.imagePath"
+          :alt="cheese.name"
+          class="size-20 shrink-0 rounded-box object-cover"
+        />
+        <div class="absolute bottom-1 right-1">
+          <PowerBadge :power="cheese.power" small />
+        </div>
+      </div>
 
       <div class="min-w-0 flex-1 space-y-2">
         <div class="flex items-start justify-between gap-2">

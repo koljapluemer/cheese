@@ -21,7 +21,7 @@ export function useInitializeGame(router: Router) {
     }
 
     if (player.starterPicksCompleted === 3 && router.currentRoute.value.name === 'name') {
-      await router.replace({ name: 'leaderboard' })
+      await router.replace({ name: 'home' })
     }
   }
 

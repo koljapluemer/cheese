@@ -10,6 +10,7 @@ export interface Cheese {
   imagePath: string
   license: string
   name: string
+  power: number
   source: string
 }
 
@@ -18,6 +19,7 @@ const cheeses = Object.entries(cheeseCatalog as Record<string, CheeseSource>).ma
     imagePath: cheese.image.replace(/^public/, ''),
     license: cheese.license,
     name,
+    power: 5,
     source: cheese.source,
   }),
 )
@@ -40,4 +42,3 @@ export function getRandomCheesePair() {
 
   return [cheeses[firstIndex], cheeses[secondIndex]]
 }
-
