@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+}
+
+:root {
+  font-family:
+    "Atkinson Hyperlegible Next",
+    "Trebuchet MS",
+    sans-serif;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: oklch(98% 0.01 95);
+}
