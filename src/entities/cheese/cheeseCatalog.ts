@@ -3,6 +3,7 @@ import cheeseCatalog from '@/db/cheeses.json'
 interface CheeseSource {
   image: string
   license: string
+  power?: number
   source: string
 }
 
@@ -19,7 +20,7 @@ const cheeses = Object.entries(cheeseCatalog as Record<string, CheeseSource>).ma
     imagePath: cheese.image.replace(/^public/, ''),
     license: cheese.license,
     name,
-    power: 5,
+    power: cheese.power ?? 5,
     source: cheese.source,
   }),
 )

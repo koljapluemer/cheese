@@ -43,8 +43,8 @@ import {
   pickRandomUnusedIndex,
 } from './fightPageHelpers'
 
-const ROUND_OVERVIEW_MS = 3000
-const ROUND_RESOLUTION_MS = 2400
+const ROUND_OVERVIEW_MS = 5000
+const ROUND_RESOLUTION_MS = 5000
 const LOOT_REVEAL_MS = 2600
 
 const { sessionState } = usePlayerSessionStore()
@@ -67,6 +67,8 @@ let unsubscribeFightOffers: (() => void) | null = null
 let unsubscribePlayerFights: (() => void) | null = null
 let lastResolutionToastKey = ''
 let lastCompletionToastKey = ''
+let loadSeq = 0
+let completionWindowEnd = 0
 
 const playerId = computed(() => sessionState.player?.id ?? '')
 const selectables = computed(() => expandInventoryForFight(inventory.value))
@@ -148,11 +150,26 @@ function toggleSelection(instanceId: string) {
   selectedInstanceIds.value = [...selectedInstanceIds.value, instanceId]
 }
 
+function applyFightIfNewer(incoming: Fight | null) {
+  if (incoming === null) {
+    if (Date.now() < completionWindowEnd) {
+      return
+    }
+    activeFight.value = null
+    return
+  }
+
+  if (!activeFight.value || incoming.updatedAt >= activeFight.value.updatedAt) {
+    activeFight.value = incoming
+  }
+}
+
 async function loadFightPage() {
   if (!playerId.value) {
     return
   }
 
+  const seq = ++loadSeq
   isLoading.value = true
   loadError.value = ''
 
@@ -164,18 +181,28 @@ async function loadFightPage() {
       getPlayerInventory(playerId.value),
     ])
 
+    if (seq !== loadSeq) {
+      return
+    }
+
     ownOffer.value = nextOwnOffer
     availableOffers.value = nextAvailableOffers
-    activeFight.value = nextActiveFight
+    applyFightIfNewer(nextActiveFight)
     inventory.value = nextInventory
 
     if (nextActiveFight || !selectionMode.value) {
       selectedInstanceIds.value = []
     }
   } catch (error) {
+    if (seq !== loadSeq) {
+      return
+    }
+
     loadError.value = error instanceof Error ? error.message : 'Could not load fights.'
   } finally {
-    isLoading.value = false
+    if (seq === loadSeq) {
+      isLoading.value = false
+    }
   }
 }
 
@@ -323,12 +350,16 @@ async function startRoundOverview(fight: Fight) {
   const payload = buildRoundOverviewPayload(fight, hostFighterIndex, guestFighterIndex)
   const phaseTimes = phaseEndsAtAfter(ROUND_OVERVIEW_MS)
 
-  await updateFightIfCurrent(fight.id, fight.updatedAt, {
+  const updated = await updateFightIfCurrent(fight.id, fight.updatedAt, {
     phase_ends_at: phaseTimes.endsAt,
     phase_payload: payload,
     phase_started_at: phaseTimes.startedAt,
     state: 'round_overview',
   })
+
+  if (updated) {
+    activeFight.value = updated
+  }
 }
 
 async function finishRoundOverview(fight: Fight) {
@@ -336,12 +367,16 @@ async function finishRoundOverview(fight: Fight) {
   const resolution = buildRoundResolutionPayload(payload, fight.hostPlayerId, fight.guestPlayerId)
   const phaseTimes = phaseEndsAtAfter(ROUND_RESOLUTION_MS)
 
-  await updateFightIfCurrent(fight.id, fight.updatedAt, {
+  const updated = await updateFightIfCurrent(fight.id, fight.updatedAt, {
     phase_ends_at: phaseTimes.endsAt,
     phase_payload: resolution,
     phase_started_at: phaseTimes.startedAt,
     state: 'round_resolution',
   })
+
+  if (updated) {
+    activeFight.value = updated
+  }
 }
 
 async function finishRoundResolution(fight: Fight) {
@@ -357,7 +392,7 @@ async function finishRoundResolution(fight: Fight) {
     const lootPayload = buildLootRevealPayload(fight, loserPlayerId)
     const phaseTimes = phaseEndsAtAfter(LOOT_REVEAL_MS)
 
-    await updateFightIfCurrent(fight.id, fight.updatedAt, {
+    const updated = await updateFightIfCurrent(fight.id, fight.updatedAt, {
       guest_points: nextGuestPoints,
       host_points: nextHostPoints,
       loser_player_id: loserPlayerId,
@@ -370,6 +405,11 @@ async function finishRoundResolution(fight: Fight) {
       used_host_fighter_indexes: nextUsedHostFighterIndexes,
       winner_player_id: winnerPlayerId,
     })
+
+    if (updated) {
+      activeFight.value = updated
+    }
+
     return
   }
 
@@ -383,7 +423,7 @@ async function finishRoundResolution(fight: Fight) {
   const nextOverview = buildRoundOverviewPayload(fight, hostFighterIndex, guestFighterIndex)
   const phaseTimes = phaseEndsAtAfter(ROUND_OVERVIEW_MS)
 
-  await updateFightIfCurrent(fight.id, fight.updatedAt, {
+  const updated = await updateFightIfCurrent(fight.id, fight.updatedAt, {
     guest_points: nextGuestPoints,
     host_points: nextHostPoints,
     phase_ends_at: phaseTimes.endsAt,
@@ -393,6 +433,10 @@ async function finishRoundResolution(fight: Fight) {
     used_guest_fighter_indexes: nextUsedGuestFighterIndexes,
     used_host_fighter_indexes: nextUsedHostFighterIndexes,
   })
+
+  if (updated) {
+    activeFight.value = updated
+  }
 }
 
 async function finishLootReveal(fight: Fight) {
@@ -413,31 +457,24 @@ async function finishLootReveal(fight: Fight) {
     throw new Error('The stolen cheese is no longer available.')
   }
 
-  await saveInventoryItem(
-    fight.loserPlayerId,
-    payload.loserCheeseName,
-    loserInventoryItem.quantity - 1,
-  )
-  await saveInventoryItem(
-    fight.winnerPlayerId,
-    payload.loserCheeseName,
-    (winnerInventoryItem?.quantity ?? 0) + 1,
-  )
-  await updatePlayerFightRecord(
-    fight.winnerPlayerId,
-    winnerSummary.fightsPlayed + 1,
-    winnerSummary.fightsWon + 1,
-  )
-  await updatePlayerFightRecord(
-    fight.loserPlayerId,
-    loserSummary.fightsPlayed + 1,
-    loserSummary.fightsWon,
-  )
-  await updateFightIfCurrent(fight.id, fight.updatedAt, {
+  await saveInventoryItem(fight.loserPlayerId, payload.loserCheeseName, loserInventoryItem.quantity - 1)
+  await saveInventoryItem(fight.winnerPlayerId, payload.loserCheeseName, (winnerInventoryItem?.quantity ?? 0) + 1)
+  await updatePlayerFightRecord(fight.winnerPlayerId, winnerSummary.fightsPlayed + 1, winnerSummary.fightsWon + 1)
+  await updatePlayerFightRecord(fight.loserPlayerId, loserSummary.fightsPlayed + 1, loserSummary.fightsWon)
+
+  const updated = await updateFightIfCurrent(fight.id, fight.updatedAt, {
     phase_ends_at: null,
     phase_started_at: new Date().toISOString(),
     state: 'completed',
   })
+
+  if (updated) {
+    completionWindowEnd = Date.now() + 2000
+    setTimeout(() => {
+      completionWindowEnd = 0
+      activeFight.value = null
+    }, 2000)
+  }
 }
 
 async function maybeAdvanceFight() {
@@ -450,15 +487,16 @@ async function maybeAdvanceFight() {
     return
   }
 
-  if (
-    activeFight.value.state === 'waiting_for_guest_team' &&
-    activeFight.value.guestTeam &&
-    activeFight.value.guestTeam.length === 3
-  ) {
+  // Snapshot state and fight once — never re-read activeFight.value after an await,
+  // because the subscription may update it mid-flight and cause double-advancement.
+  const fight = activeFight.value
+  const state = fight.state
+
+  if (state === 'waiting_for_guest_team' && fight.guestTeam && fight.guestTeam.length === 3) {
     isAdvancingFight.value = true
 
     try {
-      await startRoundOverview(activeFight.value)
+      await startRoundOverview(fight)
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'Could not start the fight.', 'error')
     } finally {
@@ -468,23 +506,19 @@ async function maybeAdvanceFight() {
     return
   }
 
-  if (!isPhaseExpired(activeFight.value.phaseEndsAt)) {
+  if (!isPhaseExpired(fight.phaseEndsAt) || Date.now() < completionWindowEnd) {
     return
   }
 
   isAdvancingFight.value = true
 
   try {
-    if (activeFight.value.state === 'round_overview') {
-      await finishRoundOverview(activeFight.value)
-    }
-
-    if (activeFight.value.state === 'round_resolution') {
-      await finishRoundResolution(activeFight.value)
-    }
-
-    if (activeFight.value.state === 'loot_reveal') {
-      await finishLootReveal(activeFight.value)
+    if (state === 'round_overview') {
+      await finishRoundOverview(fight)
+    } else if (state === 'round_resolution') {
+      await finishRoundResolution(fight)
+    } else if (state === 'loot_reveal') {
+      await finishLootReveal(fight)
     }
   } catch (error) {
     showToast(error instanceof Error ? error.message : 'Could not advance the fight.', 'error')
@@ -511,7 +545,11 @@ function subscribeToRealtime() {
           const fight = await getFightById(fightId)
 
           if (state === 'round_resolution') {
-            maybeShowRoundToast(fight)
+            const settledAt = fight.phaseEndsAt
+              ? new Date(fight.phaseEndsAt).getTime() - 1500
+              : Date.now()
+            const delay = Math.max(0, settledAt - Date.now())
+            setTimeout(() => maybeShowRoundToast(fight), delay)
           }
 
           if (state === 'completed') {

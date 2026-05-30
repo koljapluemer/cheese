@@ -2,97 +2,98 @@
   "Abbaye de Belloc": {
     "image": "public/cheese/Abbaye_de_Belloc_006.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/WikiCheese_-_Belloc_02.jpg/1280px-WikiCheese_-_Belloc_02.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0",
+    "power": 50
   },
   "Abbaye de Citeaux": {
     "image": "public/cheese/Abbaye_de_Citeaux_005.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/WikiCheese_-_Abbaye_de_C%C3%AEteaux_02.jpg/1280px-WikiCheese_-_Abbaye_de_C%C3%AEteaux_02.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Ackawi": {
     "image": "public/cheese/Ackawi_000.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Akawi_Cheese.jpg/480px-Akawi_Cheese.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Afuega'l Pitu": {
     "image": "public/cheese/Afuega_l_Pitu_005.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Quesu_afuega_el_pitu.jpg/1280px-Quesu_afuega_el_pitu.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Airag": {
     "image": "public/cheese/Airag_004.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Kumys-bottle.jpg/1280px-Kumys-bottle.jpg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 20
   },
   "Aisy Cendre": {
     "image": "public/cheese/Aisy_Cendre_001.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Aisy_cendr%C3%A9_-_Photo_2.jpg/1280px-Aisy_cendr%C3%A9_-_Photo_2.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Ambert": {
     "image": "public/cheese/Ambert_009.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Fourme_d%27Ambert_03.jpg/1280px-Fourme_d%27Ambert_03.jpg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 2
   },
   "American Cheese": {
     "image": "public/cheese/American_Cheese_006.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/2019-11-30_17_10_43_A_couple_of_individually_wrapped_Harris_Teeter_American_Cheese_singles_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg/1280px-2019-11-30_17_10_43_A_couple_of_individually_wrapped_Harris_Teeter_American_Cheese_singles_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 1
   },
   "Anejo Enchilado": {
     "image": "public/cheese/Anejo_Enchilado_000.JPG",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Queso_a%C3%B1ejo.JPG/1280px-Queso_a%C3%B1ejo.JPG",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 10
   },
   "Anthoriro": {
     "image": "public/cheese/Anthoriro_000.JPG",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/%CE%91%CE%BD%CE%B8%CF%8C%CF%84%CF%85%CF%81%CE%BF%CF%82.JPG/1280px-%CE%91%CE%BD%CE%B8%CF%8C%CF%84%CF%85%CF%81%CE%BF%CF%82.JPG",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 30
   },
   "Aromes au Gene de Marc": {
     "image": "public/cheese/Aromes_au_Gene_de_Marc_001.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Ar%C3%B4me_de_Lyon_-_Photo_2.jpg/1280px-Ar%C3%B4me_de_Lyon_-_Photo_2.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 25
   },
   "Asiago": {
     "image": "public/cheese/Asiago_001.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/d/df/Asiago.jpg",
-    "license": "CC BY-SA 2.0"
+    "license": "CC BY-SA 2.0", "power": 3
   },
   "Babybel": {
     "image": "public/cheese/Babybel_001.jpeg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Babybel_%28143761741%29.jpeg/1280px-Babybel_%28143761741%29.jpeg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 1
   },
   "Baguette Laonnaise": {
     "image": "public/cheese/Baguette_Laonnaise_000.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/WikiCheese_-_Dauphin_01.jpg/1280px-WikiCheese_-_Dauphin_01.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 20
   },
   "Beaufort": {
     "image": "public/cheese/Beaufort_003.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Beaufort_%28fromage%29_01.jpg/1280px-Beaufort_%28fromage%29_01.jpg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 30
   },
   "Beer Cheese": {
     "image": "public/cheese/Beer_Cheese_006.png",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Beer_cheese_and_crackers.png/1280px-Beer_cheese_and_crackers.png",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 50
   },
   "Beyaz Peynir": {
     "image": "public/cheese/Beyaz_Peynir_000.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Aged_Bessarabian_bryndza.jpg/1280px-Aged_Bessarabian_bryndza.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 3
   },
   "Bleu de Gex": {
     "image": "public/cheese/Bleu_de_Gex_000.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Bleu_de_Gex.jpg/1280px-Bleu_de_Gex.jpg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 20
   },
   "Blue": {
     "image": "public/cheese/Blue_003.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/A_Plate_of_French_Blue_Cheese_from_Terriors_by_LQV.jpg/1280px-A_Plate_of_French_Blue_Cheese_from_Terriors_by_LQV.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 50
   },
   "Bocconcini": {
     "image": "public/cheese/Bocconcini_008.jpg",
@@ -102,17 +103,17 @@
   "Brebis du Lavort": {
     "image": "public/cheese/Brebis_du_Lavort_000.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Lavort.jpg/1280px-Lavort.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Bresse Bleu": {
     "image": "public/cheese/Bresse_Bleu_003.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Bresse_Bleu_Fromage_500g_04.jpg/1280px-Bresse_Bleu_Fromage_500g_04.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Brie": {
     "image": "public/cheese/Brie_005.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/2021-09-08_20_09_39_ShopRite_store_prepared_Brie_with_almonds_and_fruit_in_Rochelle_Park_Township%2C_Bergen_County%2C_New_Jersey.jpg/1280px-2021-09-08_20_09_39_ShopRite_store_prepared_Brie_with_almonds_and_fruit_in_Rochelle_Park_Township%2C_Bergen_County%2C_New_Jersey.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 20
   },
   "Cabrales": {
     "image": "public/cheese/Cabrales_002.jpg",
@@ -137,22 +138,22 @@
   "Cantal": {
     "image": "public/cheese/Cantal_036.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Wikicheese-XX_-_Tome_fra%C3%AEche_de_l%27Aubrac_-_20180617_-_001.jpg/1280px-Wikicheese-XX_-_Tome_fra%C3%AEche_de_l%27Aubrac_-_20180617_-_001.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Cheddar": {
     "image": "public/cheese/Cheddar_027.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Isle_of_Mull_cheddar_cheese.jpg/1280px-Isle_of_Mull_cheddar_cheese.jpg",
-    "license": "CC BY 2.0"
+    "license": "CC BY 2.0", "power": 30
   },
   "Cottage Cheese": {
     "image": "public/cheese/Cottage_Cheese_003.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/f/f2/02._varenyky_with_cheese_-_crush_cottage_cheese.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 15
   },
   "Cream Cheese": {
     "image": "public/cheese/Cream_Cheese_015.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Modern_Kitchen_strawberry_cream_cheese_1.jpg/1280px-Modern_Kitchen_strawberry_cream_cheese_1.jpg",
-    "license": "CC0"
+    "license": "CC0", "power": 33
   },
   "Dutch Mimolette": {
     "image": "public/cheese/Dutch_Mimolette_000.JPG",
@@ -162,52 +163,52 @@
   "Edam": {
     "image": "public/cheese/Edam_039.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Nederlandse_kaas_33.jpg/1280px-Nederlandse_kaas_33.jpg",
-    "license": "CC0"
+    "license": "CC0", "power": 2
   },
   "Emmental": {
     "image": "public/cheese/Emmental_018.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Emmental_%28fromage%29_07.jpg/1280px-Emmental_%28fromage%29_07.jpg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 2
   },
   "Feta": {
     "image": "public/cheese/Feta_007.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cheese_of_Akrotiri_%284589719645%29.jpg/1280px-Cheese_of_Akrotiri_%284589719645%29.jpg",
-    "license": "CC BY 2.0"
+    "license": "CC BY 2.0", "power": 15
   },
   "Gorgonzola": {
     "image": "public/cheese/Gorgonzola_027.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/GorgonzolaDSC4233.jpg/1280px-GorgonzolaDSC4233.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Gouda": {
     "image": "public/cheese/Gouda_014.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Gouda.jpg",
-    "license": "CC BY-SA 3.0"
+    "license": "CC BY-SA 3.0", "power": 3
   },
   "Gruyere": {
     "image": "public/cheese/Gruyere_017.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Gruyere_alpage_th_w.jpg/1280px-Gruyere_alpage_th_w.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 100
   },
   "Halloumi": {
     "image": "public/cheese/Halloumi_030.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Halloumi_grilovan%C3%A9_-_%C4%8Cesk%C3%A1_republika_05.jpg/1280px-Halloumi_grilovan%C3%A9_-_%C4%8Cesk%C3%A1_republika_05.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 25
   },
   "Maasdam": {
     "image": "public/cheese/Maasdam_006.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Nederlandse_kaas_03.jpg/1280px-Nederlandse_kaas_03.jpg",
-    "license": "CC0"
+    "license": "CC0", "power": 2
   },
   "Mascarpone": {
     "image": "public/cheese/Mascarpone_028.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Mascarpone_preparato_in_casa.jpg/1280px-Mascarpone_preparato_in_casa.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 10
   },
   "Parmesan": {
     "image": "public/cheese/Parmesan_002.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/2019-11-16_02_59_40_A_small_pile_of_Giant_Real_Grated_Parmesan_Cheese_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg/1280px-2019-11-16_02_59_40_A_small_pile_of_Giant_Real_Grated_Parmesan_Cheese_in_the_Dulles_section_of_Sterling%2C_Loudoun_County%2C_Virginia.jpg",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 25
   },
   "Petit-Suisse": {
     "image": "public/cheese/Petit-Suisse_013.jpg",
@@ -222,7 +223,7 @@
   "Raclette": {
     "image": "public/cheese/Raclette_008.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Raclette_%286300310978%29.jpg/1280px-Raclette_%286300310978%29.jpg",
-    "license": "CC BY 2.0"
+    "license": "CC BY 2.0", "power": 3
   },
   "Red Leicester": {
     "image": "public/cheese/Red_Leicester_020.jpg",
@@ -232,7 +233,7 @@
   "Ricotta": {
     "image": "public/cheese/Ricotta_027.jpg",
     "source": "https://upload.wikimedia.org/wikipedia/commons/3/37/Ricotta_dome_on_plate_from_the_top.jpg",
-    "license": "CC BY 2.0"
+    "license": "CC BY 2.0", "power": 10
   },
   "Roquefort": {
     "image": "public/cheese/Roquefort_022.jpg",
@@ -242,11 +243,11 @@
   "Truffe": {
     "image": "public/cheese/Truffe_000.JPG",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Brie_%C3%A0_la_truffe1.JPG/1280px-Brie_%C3%A0_la_truffe1.JPG",
-    "license": "CC BY-SA 4.0"
+    "license": "CC BY-SA 4.0", "power": 40
   },
   "Zamorano": {
     "image": "public/cheese/Zamorano_003.JPG",
     "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Rodajas-Queso-_Zamorano.JPG/1280px-Rodajas-Queso-_Zamorano.JPG",
-    "license": "CC BY 3.0"
+    "license": "CC BY 3.0", "power": 66
   }
 }

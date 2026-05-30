@@ -128,12 +128,32 @@ const displayRollPosition = computed(() => {
     return 0.5
   }
 
-  if (!props.fight.phaseEndsAt || props.now >= phaseTimes.value.endMs - 900) {
-    return resolutionPayload.value.rollPosition
+  // rollPosition is authoritative from the host's frame: values <= hostShare = host wins (left/green).
+  // The guest's bar is also left=green, so their winning zone maps to the opposite end — mirror it.
+  const finalPosition =
+    role.value === 'host'
+      ? resolutionPayload.value.rollPosition
+      : 1 - resolutionPayload.value.rollPosition
+
+  if (!props.fight.phaseEndsAt || props.now >= phaseTimes.value.endMs - 1500) {
+    return finalPosition
   }
 
-  const oscillation = Math.sin((props.now - phaseTimes.value.startMs) / 180)
+  const elapsed = props.now - phaseTimes.value.startMs
+  const oscillation = Math.sin(elapsed / 140)
   return (oscillation + 1) / 2
+})
+
+const isResolutionSettled = computed(() => {
+  if (props.fight.state !== 'round_resolution') {
+    return false
+  }
+
+  if (!props.fight.phaseEndsAt) {
+    return true
+  }
+
+  return props.now >= phaseTimes.value.endMs - 1500
 })
 
 const ownWonResolution = computed(() => {
@@ -246,41 +266,46 @@ const winnerName = computed(() => {
         <div class="mx-auto max-w-28">
           <FightCheeseCard
             :cheese="opponentResolutionCheese"
-            :faded="ownWonResolution"
-            :spinning="!ownWonResolution"
+            :faded="isResolutionSettled && ownWonResolution"
+            :spinning="isResolutionSettled && !ownWonResolution"
             disabled
           />
         </div>
 
         <div class="space-y-2">
-          <div class="relative pt-5">
-            <div class="absolute left-0 top-0 text-xs text-success">You</div>
-            <div class="absolute right-0 top-0 text-xs text-error">{{ opponentName }}</div>
-            <div class="relative h-6 overflow-hidden rounded-full bg-base-300">
-              <div class="absolute inset-y-0 left-0 bg-success" :style="{ width: `${ownShare * 100}%` }"></div>
-              <div
-                class="absolute inset-y-0 right-0 bg-error"
-                :style="{ width: `${(1 - ownShare) * 100}%` }"
-              ></div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="text-success">You</span>
+              <span class="text-error">{{ opponentName }}</span>
+            </div>
+            <div class="relative">
               <div
                 class="absolute -top-5 text-sm font-semibold text-primary"
                 :style="{ left: `calc(${displayRollPosition * 100}% - 6px)` }"
               >
                 ▼
               </div>
+              <div class="relative h-6 overflow-hidden rounded-full bg-base-300">
+                <div class="absolute inset-y-0 left-0 bg-success" :style="{ width: `${ownShare * 100}%` }"></div>
+                <div
+                  class="absolute inset-y-0 right-0 bg-error"
+                  :style="{ width: `${(1 - ownShare) * 100}%` }"
+                ></div>
+              </div>
             </div>
           </div>
 
-          <p class="text-center text-sm font-medium">
+          <p v-if="isResolutionSettled" class="text-center text-sm font-medium">
             {{ resolutionPayload?.winnerCheeseName }} wins
           </p>
+          <p v-else class="text-center text-sm font-medium text-base-content/50">Deciding...</p>
         </div>
 
         <div class="mx-auto max-w-28">
           <FightCheeseCard
             :cheese="ownResolutionCheese"
-            :faded="!ownWonResolution"
-            :spinning="ownWonResolution"
+            :faded="isResolutionSettled && !ownWonResolution"
+            :spinning="isResolutionSettled && ownWonResolution"
             disabled
           />
         </div>
