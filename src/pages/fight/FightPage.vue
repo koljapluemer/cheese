@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { useToastStore } from '@/dumb/toast/toastStore'
+import QrInviteModal from '@/dumb/ui/QrInviteModal.vue'
 import { getCheeseByName } from '@/entities/cheese/cheeseCatalog'
 import {
   acceptFightOffer,
@@ -47,6 +49,7 @@ const ROUND_OVERVIEW_MS = 5000
 const ROUND_RESOLUTION_MS = 5000
 const LOOT_REVEAL_MS = 2600
 
+const route = useRoute()
 const { sessionState } = usePlayerSessionStore()
 const { showToast } = useToastStore()
 
@@ -61,6 +64,9 @@ const now = ref(Date.now())
 const ownOffer = ref<FightOffer | null>(null)
 const selectedInstanceIds = ref<string[]>([])
 const selectionMode = ref<'offer' | null>(null)
+const showQrModal = ref(false)
+
+const inviteOfferId = typeof route.query.invite === 'string' ? route.query.invite : null
 
 let clockTimer: ReturnType<typeof setInterval> | null = null
 let unsubscribeFightOffers: (() => void) | null = null
@@ -293,14 +299,22 @@ async function handleCreateOffer() {
   }
 }
 
-async function handleAcceptOffer(offer: FightOffer) {
-  if (!sessionState.player || isBusy.value || ownOffer.value) {
+async function handleAcceptOffer(offer: FightOffer, overrideOwnOffer = false) {
+  if (!sessionState.player || isBusy.value) {
+    return
+  }
+
+  if (ownOffer.value && !overrideOwnOffer) {
     return
   }
 
   isBusy.value = true
 
   try {
+    if (ownOffer.value) {
+      await cancelFightOffer(ownOffer.value.id, sessionState.player.id)
+    }
+
     await acceptFightOffer({
       guestNickname: sessionState.player.nickname,
       guestPlayerId: sessionState.player.id,
@@ -588,13 +602,28 @@ watch(
   },
 )
 
+async function maybeAutoAcceptInvite() {
+  if (!inviteOfferId || !sessionState.player || activeFight.value) {
+    return
+  }
+
+  const offer = availableOffers.value.find((o) => o.id === inviteOfferId)
+
+  if (!offer) {
+    showToast('This fight offer is no longer available.', 'error')
+    return
+  }
+
+  await handleAcceptOffer(offer, true)
+}
+
 onMounted(() => {
   subscribeToRealtime()
-  clockTimer = window.setInterval(() => {
+  clockTimer = setInterval(() => {
     now.value = Date.now()
     void maybeAdvanceFight()
   }, 150)
-  void loadFightPage()
+  void loadFightPage().then(() => maybeAutoAcceptInvite())
 })
 
 onUnmounted(() => {
@@ -668,6 +697,15 @@ onUnmounted(() => {
           {{ ownOffer ? 'Cancel Fight Offer' : 'Offer a Fight' }}
         </button>
 
+        <button
+          v-if="ownOffer"
+          type="button"
+          class="btn btn-outline btn-block"
+          @click="showQrModal = true"
+        >
+          Invite to Fight
+        </button>
+
         <p v-if="ownOffer" class="text-sm text-base-content/70">Waiting for someone to accept.</p>
 
         <div class="space-y-3">
@@ -691,5 +729,12 @@ onUnmounted(() => {
         </div>
       </div>
     </template>
+
+    <QrInviteModal
+      v-if="ownOffer"
+      :offer-id="ownOffer.id"
+      :open="showQrModal"
+      @close="showQrModal = false"
+    />
   </section>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useToastStore } from '@/dumb/toast/toastStore'
 import { usePlayerSessionStore } from '@/features/player-session/playerSessionStore'
@@ -8,7 +8,10 @@ import { registerPlayerName } from '@/features/player-sign-up/registerPlayerName
 
 const nickname = ref('')
 const isSubmitting = ref(false)
+const route = useRoute()
 const router = useRouter()
+
+const invite = typeof route.query.invite === 'string' ? route.query.invite : undefined
 
 const { setPlayerSession } = usePlayerSessionStore()
 const { showToast } = useToastStore()
@@ -42,7 +45,7 @@ async function handleSubmit() {
     const player = await registerPlayerName(nickname.value)
     setPlayerSession(player)
     showToast(`${player.nickname} joined the race.`, 'success')
-    await router.replace({ name: 'choose-cheese' })
+    await router.replace({ name: 'choose-cheese', query: invite ? { invite } : {} })
   } catch (error) {
     showToast(getErrorMessage(error), 'error')
   } finally {

@@ -95,23 +95,25 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const storedSession = getStoredPlayerSession()
+  const invite = typeof to.query.invite === 'string' ? to.query.invite : undefined
+  const inviteQuery = invite ? { invite } : {}
 
   if (!storedSession && to.name !== 'name') {
-    return { name: 'name' }
+    return { name: 'name', query: inviteQuery }
   }
 
   if (storedSession && to.name === 'name') {
     return storedSession.starterPicksCompleted < 3
-      ? { name: 'choose-cheese' }
-      : { name: 'home' }
+      ? { name: 'choose-cheese', query: inviteQuery }
+      : { name: 'fight', query: inviteQuery }
   }
 
   if (storedSession && storedSession.starterPicksCompleted < 3 && to.name !== 'choose-cheese') {
-    return { name: 'choose-cheese' }
+    return { name: 'choose-cheese', query: inviteQuery }
   }
 
   if (storedSession && storedSession.starterPicksCompleted >= 3 && to.name === 'choose-cheese') {
-    return { name: 'home' }
+    return invite ? { name: 'fight', query: inviteQuery } : { name: 'home' }
   }
 
   return true

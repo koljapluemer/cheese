@@ -150,7 +150,7 @@ function tickWheelClock() {
 }
 
 onMounted(() => {
-  countdownTimer = window.setInterval(tickWheelClock, 1000)
+  countdownTimer = setInterval(tickWheelClock, 1000)
   void loadWheelState()
 })
 

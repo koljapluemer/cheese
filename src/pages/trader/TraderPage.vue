@@ -203,7 +203,7 @@ async function handleSell(price: TraderPrice) {
 }
 
 onMounted(() => {
-  countdownTimer = window.setInterval(() => {
+  countdownTimer = setInterval(() => {
     currentTime.value = Date.now()
   }, 1000)
   void loadTraderPage()

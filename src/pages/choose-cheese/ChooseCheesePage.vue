@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useToastStore } from '@/dumb/toast/toastStore'
 import CheeseCard from '@/dumb/ui/CheeseCard.vue'
@@ -8,8 +8,11 @@ import { getRandomCheesePair, type Cheese } from '@/entities/cheese/cheeseCatalo
 import { usePlayerSessionStore } from '@/features/player-session/playerSessionStore'
 import { pickStarterCheese } from '@/features/player-starter-pack/pickStarterCheese'
 
+const route = useRoute()
 const router = useRouter()
 const isSaving = ref(false)
+
+const invite = typeof route.query.invite === 'string' ? route.query.invite : undefined
 const options = ref<Cheese[]>(getRandomCheesePair())
 
 const { sessionState, setPlayerSession } = usePlayerSessionStore()
@@ -34,7 +37,7 @@ async function chooseCheese(cheeseName: string) {
     showToast(`1 ${cheeseName} added.`, 'success')
 
     if (player.starterPicksCompleted >= 3) {
-      await router.replace({ name: 'home' })
+      await router.replace(invite ? { name: 'fight', query: { invite } } : { name: 'home' })
       return
     }
 
